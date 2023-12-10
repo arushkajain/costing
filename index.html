@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            max-width: 600px; /* Increased max-width for better visibility */
+            margin: 20px auto;
+        }
+
+        .material-container {
+            display: flex; /* Use flexbox for side-by-side display */
+            margin-bottom: 16px;
+        }
+
+        label {
+            width: 33.33%; /* Set each label to one-third of the container */
+            box-sizing: border-box;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 33.33%; /* Set each input to one-third of the container */
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+            width: auto; /* Adjust button width to content */
+        }
+
+        button.add-material {
+            background-color: #3498db; /* Blue color for Add Raw Material button */
+            color: white;
+        }
+
+        button.calculate {
+            background-color: #3498db; /* Blue color for Calculate button */
+            color: white;
+        }
+
+        .material-container:last-child label,
+        .material-container:last-child input {
+            margin-bottom: 0; /* Remove margin-bottom for the last material */
+        }
+
+        .result-container {
+            border: 2px solid #4CAF50; /* Thick borders and green color for the result box */
+            padding: 8px;
+            margin-top: 16px;
+            display: inline-block; /* Display result box inline */
+        }
+    </style>
+</head>
+<body>
+
+    <form id="costCalculator">
+        <div id="materialsContainer">
+            <!-- Initially display 5 blank columns -->
+            <div class="material-container">
+                <label for="quantity1">Raw Material Quantity 1 (kg):</label>
+                <input type="number" id="quantity1" name="quantity1">
+
+                <label for="rawMaterialCost1">Cost 1 (Rs):</label>
+                <input type="number" id="rawMaterialCost1" name="rawMaterialCost1">
+            </div>
+
+            <div class="material-container">
+                <label for="quantity2">Raw Material Quantity 2 (kg):</label>
+                <input type="number" id="quantity2" name="quantity2">
+
+                <label for="rawMaterialCost2">Cost 2 (Rs):</label>
+                <input type="number" id="rawMaterialCost2" name="rawMaterialCost2">
+            </div>
+
+            <div class="material-container">
+                <label for="quantity3">Raw Material Quantity 3 (kg):</label>
+                <input type="number" id="quantity3" name="quantity3">
+
+                <label for="rawMaterialCost3">Cost 3 (Rs):</label>
+                <input type="number" id="rawMaterialCost3" name="rawMaterialCost3">
+            </div>
+
+            <div class="material-container">
+                <label for="quantity4">Raw Material Quantity 4 (kg):</label>
+                <input type="number" id="quantity4" name="quantity4">
+
+                <label for="rawMaterialCost4">Cost 4 (Rs):</label>
+                <input type="number" id="rawMaterialCost4" name="rawMaterialCost4">
+            </div>
+
+            <div class="material-container">
+                <label for="quantity5">Raw Material Quantity 5 (kg):</label>
+                <input type="number" id="quantity5" name="quantity5">
+
+                <label for="rawMaterialCost5">Cost 5 (Rs):</label>
+                <input type="number" id="rawMaterialCost5" name="rawMaterialCost5">
+            </div>
+        </div>
+
+        <button type="button" class="add-material" onclick="addMaterial()">Add Raw Material</button>
+
+        <button type="button" class="calculate" onclick="calculateCost()">Calculate</button>
+
+        <div class="result-container">
+            <label for="result">Average Cost per kg (Rs):</label>
+            <input type="text" id="result" name="result" readonly>
+        </div>
+    </form>
+
+    <script>
+        var materialCount = 6; // Start from 6 to initially display 5 columns
+
+        function addMaterial() {
+            if (materialCount <= 10) { // Limit to a total of 10 materials for simplicity
+                var container = document.getElementById('materialsContainer');
+                var materialDiv = document.createElement('div');
+                materialDiv.className = 'material-container';
+
+                materialDiv.innerHTML = `
+                    <label for="quantity${materialCount}">Raw Material Quantity ${materialCount} (kg):</label>
+                    <input type="number" id="quantity${materialCount}" name="quantity${materialCount}">
+
+                    <label for="rawMaterialCost${materialCount}">Cost ${materialCount} (Rs):</label>
+                    <input type="number" id="rawMaterialCost${materialCount}" name="rawMaterialCost${materialCount}">
+                `;
+
+                container.appendChild(materialDiv);
+                materialCount++;
+            } else {
+                alert("You've reached the maximum limit of 10 materials.");
+            }
+        }
+
+        function calculateCost() {
+            var totalCost = 0;
+            var totalQuantity = 0;
+
+            for (var i = 1; i < materialCount; i++) {
+                var quantity = parseFloat(document.getElementById(`quantity${i}`).value) || 0;
+                var rawMaterialCost = parseFloat(document.getElementById(`rawMaterialCost${i}`).value) || 0;
+
+                totalCost += rawMaterialCost * quantity;
+                totalQuantity += quantity;
+            }
+
+            if (totalQuantity > 0) {
+                var averageCostPerKg = totalCost / totalQuantity;
+                document.getElementById('result').value = averageCostPerKg.toFixed(2);
+            } else {
+                alert('Please add at least one raw material.');
+            }
+        }
+    </script>
+
+</body>
+</html>
